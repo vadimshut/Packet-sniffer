@@ -4,9 +4,21 @@ import scapy.all as scapy
 from scapy.layers import http
 from colorama import Fore, init
 from datetime import datetime
+import subprocess
 
 init(autoreset=True)
 iface = "eth0"
+
+
+def get_list_interfaces():
+    list_interfaces = []
+    output = subprocess.check_output("ifconfig")
+    list_ifconfig = output.decode().split("\n")
+    for i in list_ifconfig:
+        if len(i.split(": flags=")) > 1:
+            interface = i.split(": flags=")[0].strip()
+            list_interfaces.append(interface)
+    return list_interfaces
 
 
 def sniff(interface):
